@@ -7,8 +7,8 @@ WORKDIR /src
 RUN apt-get update && \
     apt-get -y install gcc libpq-dev
 
-COPY requirements/default.txt /src/
+COPY requirements/ requirements/
 
-RUN python3 -m pip install -r default.txt --no-cache-dir
+RUN python3 -m pip install -r requirements/default.txt --no-cache-dir
 
 COPY . /src/

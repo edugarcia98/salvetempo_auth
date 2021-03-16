@@ -32,7 +32,10 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(",")
 # Application definition
 
 INSTALLED_APPS = [
-    #Django settings
+    # salvetempo_auth apps
+    "authentication",
+
+    # Django settings
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -68,6 +71,8 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTH_USER_MODEL = "authentication.User"
 
 WSGI_APPLICATION = "salvetempo_auth.wsgi.application"
 
