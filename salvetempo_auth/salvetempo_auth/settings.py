@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import datetime
 from pathlib import Path
 from decouple import config
 
@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    # External modules
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -76,6 +79,22 @@ AUTH_USER_MODEL = "authentication.User"
 
 WSGI_APPLICATION = "salvetempo_auth.wsgi.application"
 
+# DRF settings
+
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
+    )
+}
+
+# JWT settings
+
+JWT_AUTH = {
+    "JWT_EXPIRATION_DELTA": datetime.timedelta(days=1),
+    "JWT_AUTH_HEADER_PREFIX": "Bearer",
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
