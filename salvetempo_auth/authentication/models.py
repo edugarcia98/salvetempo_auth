@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
 
@@ -14,7 +15,10 @@ class UserManager(BaseUserManager):
         self._validate_user(email, password)
 
         user = self.model(email=email)
+
+        validate_password(password)
         user.set_password(password)
+
         user.save(using=self._db)
 
         return user
