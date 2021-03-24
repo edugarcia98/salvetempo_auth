@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     # External modules
     "rest_framework",
+    "rest_auth",
 ]
 
 MIDDLEWARE = [
@@ -59,10 +60,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "salvetempo_auth.urls"
 
+TEMPLATES_ROOT = str(BASE_DIR / "templates")
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": (TEMPLATES_ROOT),
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -87,6 +89,12 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
     )
+}
+
+# REST Auth settings
+
+REST_AUTH_SERIALIZERS = {
+    "PASSWORD_RESET_SERIALIZER": "authentication.serializers.PasswordResetSerializer",
 }
 
 # JWT settings
