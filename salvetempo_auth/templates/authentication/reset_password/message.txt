@@ -9,6 +9,6 @@
 
 {% blocktrans %}Obrigado por utilizar nosso sistema!{% endblocktrans %}
 
-{% blocktrans %}Equipe {{ site_name }}{% endblocktrans %}
+{% blocktrans %}Equipe SalveTempo{% endblocktrans %}
 
 {% endautoescape %}
