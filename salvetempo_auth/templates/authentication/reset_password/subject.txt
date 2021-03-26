@@ -1,0 +1,4 @@
+{% load i18n %}
+{% autoescape off %}
+{% blocktrans %}Recuperação de senha{% endblocktrans %}
+{% endautoescape %}

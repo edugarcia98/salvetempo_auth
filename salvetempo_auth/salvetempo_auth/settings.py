@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     # External modules
     "rest_framework",
+    "rest_auth",
 ]
 
 MIDDLEWARE = [
@@ -59,10 +60,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "salvetempo_auth.urls"
 
+TEMPLATES_ROOT = str(BASE_DIR / "templates")
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": (TEMPLATES_ROOT),
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -87,6 +89,12 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
     )
+}
+
+# REST Auth settings
+
+REST_AUTH_SERIALIZERS = {
+    "PASSWORD_RESET_SERIALIZER": "authentication.serializers.PasswordResetSerializer",
 }
 
 # JWT settings
@@ -150,3 +158,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = "/static/"
+
+# Email settings
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = config("EMAIL_HOST")
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = config("EMAIL_PORT", cast=int)
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
