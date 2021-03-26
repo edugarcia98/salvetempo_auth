@@ -1,7 +1,10 @@
-from django.contrib.auth.views import PasswordResetConfirmView
+from django.contrib.auth.views import (
+    PasswordResetCompleteView,
+    PasswordResetConfirmView,
+)
 from django.urls import include, path
 
-from rest_auth.views import PasswordResetView, PasswordResetConfirmView
+from rest_auth.views import PasswordResetView
 from rest_framework.routers import DefaultRouter
 from rest_framework_jwt.views import (
     obtain_jwt_token,
@@ -23,15 +26,15 @@ urlpatterns = [
 
     # Reset password urls
     path("password/reset/", PasswordResetView.as_view(), name="rest_password_reset"),
-    #path(
-    #    "password/reset/confirm/",
-    #    PasswordResetConfirmView.as_view(),
-    #    name="rest_password_reset_confirm",
-    #),
     path(
-        "confirm/<uidb64>/<token>/",
+        "password/reset/confirm/<uidb64>/<token>/",
         PasswordResetConfirmView.as_view(),
         name="password_reset_confirm",
+    ),
+    path(
+        "password/reset/complete/",
+        PasswordResetCompleteView.as_view(),
+        name="password_reset_complete",   
     ),
 
     # Router urls

@@ -1,6 +1,6 @@
 {% load i18n %}{% autoescape off %}
 {% load i18n %}{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}Olá!{% endblocktrans %}
-{% blocktrans %}Você está recebendo este e-mail porque você solicitou a redefinição da sua senha no {{ site_name }}.{% endblocktrans %}
+{% blocktrans %}Você está recebendo este e-mail porque você solicitou a redefinição da sua senha no SalveTempo.{% endblocktrans %}
 
 {% blocktrans %}Por favor, acesse a seguinte página para definir sua nova senha:{% endblocktrans %}
 {% block reset_link %}
