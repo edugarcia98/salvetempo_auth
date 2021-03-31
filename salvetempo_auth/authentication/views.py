@@ -1,13 +1,47 @@
+from allauth.account.models import EmailAddress
+from allauth.account.utils import complete_signup
+from django.conf import settings
 from django.core.exceptions import ValidationError as DjangoValidationError
-
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import AuthenticationFailed, NotFound, ValidationError
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework_jwt.views import ObtainJSONWebToken
+from rest_framework_jwt.utils import jwt_response_payload_handler
 
 from .models import User
 from .serializers import UserSerializer
+
+
+class JWTLoginView(ObtainJSONWebToken):
+    """
+        Rest framework JWT overriden view considering email verification
+    """
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid(raise_exception=True):
+            user = serializer.object.get("user") or request.user
+
+            if settings.ACCOUNT_EMAIL_VERIFICATION == "mandatory":
+                try:
+                    email_address = EmailAddress.objects.get(email=user.email)
+                except EmailAddress.DoesNotExist:
+                    raise NotFound(detail={"error": "Email address not found."})
+                except EmailAddress.MultipleObjectsReturned:
+                    raise ValidationError(
+                        detail={"error": "More than one email addres found."},
+                    )
+                
+                if not email_address.verified:
+                    raise AuthenticationFailed(detail={"error": "Email not verified."})
+
+            token = serializer.object.get("token")
+            response_data = jwt_response_payload_handler(token, user, request)
+
+            return Response(response_data)
 
 
 class UserViewSet(ModelViewSet):
@@ -32,5 +66,9 @@ class UserViewSet(ModelViewSet):
             raise ValidationError(detail={"error": list(exc)})
         except Exception as exc:
             raise ValidationError(detail={"error": str(exc)})
+        
+        complete_signup(
+            request._request, user, settings.ACCOUNT_EMAIL_VERIFICATION, None,
+        )
         
         return Response(UserSerializer(instance=user).data, status.HTTP_201_CREATED)
