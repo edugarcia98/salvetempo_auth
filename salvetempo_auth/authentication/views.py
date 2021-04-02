@@ -1,5 +1,5 @@
 from allauth.account.models import EmailAddress
-from allauth.account.utils import complete_signup
+from allauth.account.utils import send_email_confirmation
 from django.conf import settings
 from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import status
@@ -67,9 +67,7 @@ class UserViewSet(ModelViewSet):
         except Exception as exc:
             raise ValidationError(detail={"error": str(exc)})
         
-        complete_signup(
-            request._request, user, settings.ACCOUNT_EMAIL_VERIFICATION, None,
-        )
+        send_email_confirmation(request, user)
         
         return Response(UserSerializer(instance=user).data, status.HTTP_201_CREATED)
 
