@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import datetime
+import os
+
 from pathlib import Path
 from decouple import config
 from django.urls import reverse_lazy
@@ -64,11 +66,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "salvetempo_auth.urls"
 
-TEMPLATES_ROOT = str(BASE_DIR / "templates")
+TEMPLATES_ROOT = os.path.join(BASE_DIR, "templates")
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": (TEMPLATES_ROOT),
+        "DIRS": [TEMPLATES_ROOT],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
