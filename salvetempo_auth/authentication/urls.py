@@ -4,12 +4,13 @@ from django.contrib.auth.views import (
 )
 from django.urls import include, path
 
+from allauth.account.views import confirm_email
 from rest_auth.views import PasswordResetView
 from rest_framework.routers import DefaultRouter
 from rest_framework_jwt.views import refresh_jwt_token, verify_jwt_token
 
 
-from .views import JWTLoginView, UserViewSet
+from .views import already_sent, complete, JWTLoginView, UserViewSet
 
 
 router = DefaultRouter()
@@ -33,6 +34,11 @@ urlpatterns = [
         PasswordResetCompleteView.as_view(),
         name="password_reset_complete",   
     ),
+
+    # Confirm email urls
+    path("email/verify/<key>/", confirm_email, name="account_confirm_email"),
+    path("email/confirm/sent/", already_sent, name="account_email_verification_sent"),
+    path("email/confirm/complete/", complete, name="account_confirm_complete"),
 
     # Router urls
     path("", include(router.urls)),

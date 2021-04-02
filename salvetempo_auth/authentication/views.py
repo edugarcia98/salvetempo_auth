@@ -3,7 +3,7 @@ from allauth.account.utils import complete_signup
 from django.conf import settings
 from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.exceptions import AuthenticationFailed, NotFound, ValidationError
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -72,3 +72,15 @@ class UserViewSet(ModelViewSet):
         )
         
         return Response(UserSerializer(instance=user).data, status.HTTP_201_CREATED)
+
+
+@api_view()
+def already_sent(request):
+    message = "Confirmation email already sent."
+    return Response({"message": message}, status.HTTP_400_BAD_REQUEST)
+
+
+@api_view()
+def complete(request):
+    message = "Email is activated."
+    return Response({"message": message}, status.HTTP_200_OK)
