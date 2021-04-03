@@ -30,10 +30,6 @@ class JWTLoginView(ObtainJSONWebToken):
                     email_address = EmailAddress.objects.get(email=user.email)
                 except EmailAddress.DoesNotExist:
                     raise NotFound(detail={"error": "Email address not found."})
-                except EmailAddress.MultipleObjectsReturned:
-                    raise ValidationError(
-                        detail={"error": "More than one email addres found."},
-                    )
                 
                 if not email_address.verified:
                     raise AuthenticationFailed(detail={"error": "Email not verified."})

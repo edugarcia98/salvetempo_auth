@@ -18,7 +18,7 @@ router.register("user", UserViewSet, basename="user")
 
 urlpatterns = [
     # Login and token urls
-    path("login/", JWTLoginView.as_view()),
+    path("login/", JWTLoginView.as_view(), name="login"),
     path("verify-token/", verify_jwt_token),
     path("refresh-token/", refresh_jwt_token),
 
