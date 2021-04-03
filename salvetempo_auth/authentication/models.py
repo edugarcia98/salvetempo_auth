@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.password_validation import validate_password
@@ -42,7 +43,7 @@ class User(AbstractBaseUser):
     is_staff = models.BooleanField(verbose_name="Staff", default=False)
     is_superuser = models.BooleanField(verbose_name="Superuser", default=False)
 
-    USERNAME_FIELD = "email"
+    USERNAME_FIELD = settings.ACCOUNT_USER_MODEL_USERNAME_FIELD
 
     REQUIRED_FIELDS = []
 

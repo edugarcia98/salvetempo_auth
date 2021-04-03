@@ -1,0 +1,11 @@
+{% load account %}{% load i18n %}{% autoescape off %}{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}Olá,
+
+Obrigado por se cadastrar no SalveTempo!
+
+Para confirmar seu endereço de e-mail clique no link abaixo: 
+
+{{ activate_url }}
+{% endblocktrans %}
+{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}Obrigado,
+Equipe SalveTempo{% endblocktrans %}
+{% endautoescape %}
