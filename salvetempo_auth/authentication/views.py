@@ -1,12 +1,16 @@
+import jwt
+
 from allauth.account.models import EmailAddress
 from allauth.account.utils import send_email_confirmation
+from datetime import datetime, timedelta
 from django.conf import settings
 from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import status
 from rest_framework.decorators import action, api_view
 from rest_framework.exceptions import AuthenticationFailed, NotFound, ValidationError
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ViewSet
 from rest_framework_jwt.views import ObtainJSONWebToken
 from rest_framework_jwt.utils import jwt_response_payload_handler
 
@@ -40,7 +44,7 @@ class JWTLoginView(ObtainJSONWebToken):
             return Response(response_data)
 
 
-class UserViewSet(ModelViewSet):
+class UserViewSet(ViewSet):
     """
         Viewset for User actions
     """
@@ -66,6 +70,27 @@ class UserViewSet(ModelViewSet):
         send_email_confirmation(request, user)
         
         return Response(UserSerializer(instance=user).data, status.HTTP_201_CREATED)
+
+
+class TokenRefreshTimeViewSet(ViewSet):
+    """
+        Viewset for Token Refresh Time action
+    """
+
+    permission_classes = (IsAuthenticated, )
+
+    @action(methods=("GET",), detail=False, url_path="refresh-time")
+    def token_refresh_time(self, request):
+        token = request.headers.get("Authorization").split(" ")[1]
+
+        decoded = jwt.decode(token, options={"verify_signature": False})
+        refresh_token_after = (
+            datetime.fromtimestamp(decoded["exp"]) - timedelta(minutes=1)
+        )
+
+        return Response(
+            {"refresh_token_after": refresh_token_after}, status.HTTP_200_OK,
+        )
 
 
 @api_view()
