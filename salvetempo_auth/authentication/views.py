@@ -80,9 +80,9 @@ class TokenRefreshTimeViewSet(ViewSet):
     permission_classes = (IsAuthenticated, )
 
     @action(methods=("GET",), detail=False, url_path="refresh-time")
-    def token_refresh_time(self, request):
+    def refresh_time(self, request):
         token = request.headers.get("Authorization").split(" ")[1]
-
+        
         decoded = jwt.decode(token, options={"verify_signature": False})
         refresh_token_after = (
             datetime.fromtimestamp(decoded["exp"]) - timedelta(minutes=1)

@@ -166,6 +166,19 @@ class TestRegisterUser(APITestCase):
         self.assertFalse(mocked_send_email_confirmation.called)
 
 
+class TestTokenRefreshTime(APITestCase):
+    """
+    Token refresh time test cases 
+    """
+
+    def setUp(self):
+        self.resource_url = reverse("token-refresh-time")
+        self.headers = {"Content-Type": "application/json"}
+    
+    def test_correct_resource_url(self):
+        self.assertEqual(self.resource_url, "/api/auth/token/refresh-time/")
+
+
 class TestAlreadySentView(APITestCase):
     """
     Already sent API view test cases
