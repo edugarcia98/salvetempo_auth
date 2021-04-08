@@ -129,8 +129,8 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = "email"
 JWT_AUTH = {
     "JWT_ALLOW_REFRESH": True,
     "JWT_AUTH_HEADER_PREFIX": "Bearer",
-    "JWT_EXPIRATION_DELTA": datetime.timedelta(days=3),
-    "JWT_REFRESH_EXPIRATION_DELTA": datetime.timedelta(days=3),
+    "JWT_EXPIRATION_DELTA": datetime.timedelta(hours=1),
+    "JWT_REFRESH_EXPIRATION_DELTA": datetime.timedelta(hours=1),
 }
 
 # Database
