@@ -81,15 +81,27 @@ class TokenRefreshTimeViewSet(ViewSet):
 
     @action(methods=("GET",), detail=False, url_path="refresh-time")
     def refresh_time(self, request):
-        token = request.headers.get("Authorization").split(" ")[1]
+        try:
+            token = request.headers.get("Authorization").split(" ")[1]
+        except (AttributeError, IndexError):
+            raise ValidationError(detail={"error": "Unable to get JWT token."})
         
-        decoded = jwt.decode(token, options={"verify_signature": False})
-        refresh_token_after = (
-            datetime.fromtimestamp(decoded["exp"]) - timedelta(minutes=1)
-        )
+        try:
+            decoded = jwt.decode(token, options={"verify_signature": False})
+        except jwt.exceptions.DecodeError:
+            raise ValidationError(detail={"error": "Unable to decode JWT token."})       
+
+        try:
+            refresh_token_after = (
+                datetime.fromtimestamp(decoded["exp"]) - timedelta(minutes=1)
+            )
+        except (KeyError, TypeError):
+            raise ValidationError(
+                detail={"error": "Some error occured while retrieving refresh time."}
+            )
 
         return Response(
-            {"refresh_token_after": refresh_token_after}, status.HTTP_200_OK,
+            {"refresh_token_after": str(refresh_token_after)}, status.HTTP_200_OK,
         )
 
 
