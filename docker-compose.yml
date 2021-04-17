@@ -9,12 +9,27 @@ services:
       - POSTGRES_PASSWORD=admin
     ports:
       - "5432:5432"
+
   web:
     build: .
-    command: python salvetempo_auth/manage.py runserver 0.0.0.0:8000
+    command: bash -c "python salvetempo_auth/manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/src
     ports:
       - "8000:8000"
     depends_on:
-      - db 
+      - db
+      - redis
+  
+  redis:
+    image: "redis:alpine"
+    ports:  
+      - "6379:6379"
+  
+  celery:
+    build: .
+    command: bash -c "cd /src/salvetempo_auth && celery -A salvetempo_auth worker -l info"
+    volumes: 
+      - .:/src
+    depends_on: 
+      - redis

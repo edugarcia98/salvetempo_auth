@@ -1,7 +1,6 @@
 import jwt
 
 from allauth.account.models import EmailAddress
-from allauth.account.utils import send_email_confirmation
 from datetime import datetime, timedelta
 from django.conf import settings
 from django.core.exceptions import ValidationError as DjangoValidationError
@@ -16,6 +15,7 @@ from rest_framework_jwt.utils import jwt_response_payload_handler
 
 from .models import User
 from .serializers import UserSerializer
+from .tasks import send_email_confirmation_after_register
 
 
 class JWTLoginView(ObtainJSONWebToken):
@@ -67,7 +67,7 @@ class UserViewSet(ViewSet):
         except Exception as exc:
             raise ValidationError(detail={"error": str(exc)})
         
-        send_email_confirmation(request, user)
+        send_email_confirmation_after_register.delay(user.email)
         
         return Response(UserSerializer(instance=user).data, status.HTTP_201_CREATED)
 
