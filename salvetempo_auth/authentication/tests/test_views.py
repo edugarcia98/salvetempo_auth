@@ -87,7 +87,7 @@ class TestRegisterUser(APITestCase):
     def test_correct_resource_url(self):
         self.assertEqual(self.resource_url, "/api/auth/user/register/")
 
-    @patch("authentication.views.send_email_confirmation")
+    @patch("authentication.views.send_email_confirmation_after_register.delay")
     def test_register_user_success(self, mocked_send_email_confirmation):
         response = self.client.post(self.resource_url, self.payload)
         data = response.json()
@@ -99,7 +99,7 @@ class TestRegisterUser(APITestCase):
         self.assertEqual(data["email"], "test@test.com")
         self.assertTrue(mocked_send_email_confirmation.called)
     
-    @patch("authentication.views.send_email_confirmation")
+    @patch("authentication.views.send_email_confirmation_after_register.delay")
     def test_register_user_empty_payload(self, mocked_send_email_confirmation):
         empty_payload={}
 
@@ -112,7 +112,7 @@ class TestRegisterUser(APITestCase):
         self.assertIn("password_confirm", data)
         self.assertFalse(mocked_send_email_confirmation.called)
     
-    @patch("authentication.views.send_email_confirmation")
+    @patch("authentication.views.send_email_confirmation_after_register.delay")
     def test_register_user_different_passwords(self, mocked_send_email_confirmation):
         self.payload["password_confirm"] = "different_pwd"
 
@@ -123,7 +123,7 @@ class TestRegisterUser(APITestCase):
         self.assertEqual(data["error"], "Passwords must be equal.")
         self.assertFalse(mocked_send_email_confirmation.called)
 
-    @patch("authentication.views.send_email_confirmation")
+    @patch("authentication.views.send_email_confirmation_after_register.delay")
     def test_register_user_invalid_password(self, mocked_send_email_confirmation):
         self.payload["password"] = "123"
         self.payload["password_confirm"] = "123"
@@ -135,10 +135,10 @@ class TestRegisterUser(APITestCase):
         self.assertIsInstance(data["error"], list)
         self.assertFalse(mocked_send_email_confirmation.called)
 
-    @patch("authentication.views.send_email_confirmation")
+    @patch("authentication.views.send_email_confirmation_after_register.delay")
     @patch("authentication.models.UserManager.create_user")
     def test_register_user_unknown_error(
-        self, mocked_create_user, mocked_send_email_confirmation
+        self, mocked_create_user, mocked_send_email_confirmation,
     ):
         mocked_create_user.side_effect = ValueError("Create user value error.")
 

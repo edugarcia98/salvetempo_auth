@@ -13,9 +13,6 @@ def send_email_confirmation_after_register(email: str):
     except User.DoesNotExist:
         # TODO: Add logging
         raise
-    except MultipleObjectsReturned:
-        # TODO: Add logging
-        raise
 
     try:
         EmailAddress.objects.add_email(None, user, email, confirm=True)
