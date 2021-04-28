@@ -15,3 +15,6 @@ jobs:
 
       - name: Copy environment
         run: cp .env.template .env
+      
+      - name: Migrate
+        run: python manage.py migrate
