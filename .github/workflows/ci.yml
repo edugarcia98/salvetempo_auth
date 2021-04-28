@@ -17,4 +17,4 @@ jobs:
         run: cp .env.template .env
       
       - name: Migrate
-        run: python manage.py migrate
+        run: bash -c "cd /src/salvetempo_auth && python manage.py migrate"
