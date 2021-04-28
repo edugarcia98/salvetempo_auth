@@ -9,12 +9,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Build Docker
-        run: docker-compose build --no-cache
-
-      - name: Copy environment
-        run: cp .env.template .env
       
       - name: Migrate
-        run: bash -c "cd /src/salvetempo_auth && python manage.py migrate"
+        run: dir
