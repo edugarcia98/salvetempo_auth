@@ -1,0 +1,25 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build Docker
+        run: docker-compose build --no-cache
+
+      - name: Copy environment
+        run: cp .env.template .env
+      
+      - name: Perform migrations
+        run: docker-compose run web python salvetempo_auth/manage.py migrate
+      
+      - name: Unit tests
+        run: |
+          docker-compose run web python salvetempo_auth/manage.py \
+          test salvetempo_auth --settings=salvetempo_auth.test_settings
