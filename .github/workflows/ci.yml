@@ -16,5 +16,9 @@ jobs:
       - name: Copy environment
         run: cp .env.template .env
       
-      - name: Migrate
+      - name: Perform migrations
         run: docker-compose run web python salvetempo_auth/manage.py migrate
+      
+      - name: Unit tests
+        run: docker-compose run web python salvetempo_auth/manage.py \
+             test salvetempo_auth --settings=salvetempo_auth.test_settings
