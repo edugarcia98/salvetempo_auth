@@ -31,7 +31,7 @@ http://localhost:8000/admin/
 ```
 
 > A porta 8000 foi configurada como padrão, caso a mesma já esteja sendo usada, basta alterá-la
-> no arquivo `docker-compose.yml`
+> no arquivo `docker-compose.yml` <br>
 > **Caso a porta seja alterada, não commitar essa alteração.**
 
 ## Testes unitários
